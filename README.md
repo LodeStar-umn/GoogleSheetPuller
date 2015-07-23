@@ -170,6 +170,8 @@ The first row of a sheet is assumed to be the column headers and must contain so
 
 The displayGoogleSheet function can only display information from a single sheet.  Displaying information from multiple sheets is not yet supported.
 
+This is extremely light on error handeling.
+
 ##Author(s):
 Kim Doberstein (dobe0002@umn.edu) - OIT, University of Minnesota
 
