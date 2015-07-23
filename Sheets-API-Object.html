@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Example Google Sheet</title>
+</head>
+
+<body>
+	<h1>Example Google Sheet</h1>
+	<div id="results-SampleSheet"></div>
+
+	<div id="results-SampleSheet2"></div>
+
+
+
+
+
+	<script type="text/javascript" src="Sheets-API-Object.js"></script>
+	<script>
+	displayGoogleSheet({
+			'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
+			'sheetId':'od6',
+			'containingObj':document.getElementById('results-SampleSheet')
+		});
+
+
+	displayGoogleSheet({
+			'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
+			'sheetId':'od6',
+			'callbackClean':function(cleanResults){
+				console.log(cleanResults);
+				var HTML="<ul>";
+				/*return simplified version:
+					[
+						{'column':'data row1', 'column','data row1', 'column':'data row1'},  
+						{'column':'data row2', 'column','data row2', 'column':'data row2'},   ...
+					]
+				*/
+				for(var i=0;i<cleanResults.length;i++){
+					HTML+="<li>"+cleanResults[i].Color+" "+cleanResults[i].Number+"</li>";
+				}
+				HTML+="</ul>";
+				document.getElementById('results-SampleSheet2').innerHTML=HTML;
+
+			}
+		});
+	</script>
+</body>
+
+</html>
