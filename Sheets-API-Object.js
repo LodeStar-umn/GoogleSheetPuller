@@ -18,8 +18,14 @@ function displayGoogleSheet(options){
 	for (var key in options) {if(options[key]!=undefined)settings[key]=options[key]} // push options into settings
 
 	if(settings.feedURL!="") var URL=feedURL;
-	else var URL = 'https://spreadsheets.google.com/feeds/cells/'+settings.sheetsId+'/'+settings.sheetId+'/public/full?alt=json';
+	else{ 
+		//var URL = 'https://spreadsheets.google.com/feeds/cells/'+settings.sheetsId+'/'+settings.sheetId+'/public/full?alt=json';
 	//var URL = 'https://spreadsheets.google.com/feeds/cells/'+settings.sheetsId+'/od6/public/full?alt=json';
+		var protocol="https:";
+		if(location.protocol=="http:") protocol="http:";
+			var URL=protocol+'//spreadsheets.google.com/feeds/cells/'+settings.sheetsId+'/'+settings.sheetId+'/public/full?alt=json';
+			//console.log("URL: "+URL);
+	}
 	var dataResult;
 
 
@@ -35,7 +41,8 @@ function displayGoogleSheet(options){
 		  //xhr.onload = function() {appendResults(JSON.parse(xhr.responseText));};
 		  xhr.onload = function() {processResults(JSON.parse(xhr.responseText))};
 		  xhr.onerror = function() {alert('Error making the CORS request.');};
-		
+		  xhr.onprogress=function(){};
+		 xhr.ontimeout=function(){};
 		  xhr.send();
 	};
 
