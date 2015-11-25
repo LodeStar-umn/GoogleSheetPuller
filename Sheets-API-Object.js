@@ -1,7 +1,50 @@
-// JavaScript Document
+// displayGoogleSheet
 
-// THIS ONLY DISPLAYS THE FIRST SHEET
-// THERE MUST BE SOMETHING IN EACH COLUMN IN THE FIRST ROW
+
+// Kim Doberstein 
+// University of Minnesota
+// Version 0.5
+
+
+// JQUERY PLUGIN
+try
+{
+     var jqueryIsLoaded = jQuery;
+     (function( $ ){
+
+		  $.fn.displayGoogleSheet = function( options ) {  
+
+		    var settings = {
+		    	'sheetsId':'', // ID of the Google spreadsheet file 
+				'sheetId':'od6', //ID of the individual sheet.  Defaults to the first sheet
+				'success':'', //  callback to be used to display the JSON feed from Google
+				'feedURL':'' // if known the URL to the sheet feed can be supplied
+		    }; 
+		      if ( options ) { $.extend( settings, options ); }
+			 
+		    return this.each(function() {        
+		      
+				displayGoogleSheet({
+					'sheetsId':settings.sheetsId,
+					'sheetId':settings.sheetId,
+					'feedURL':settings.feedURL,
+					'containingObj':this
+				});
+				if(settings.success!=""){settings.success(); }
+
+
+		    });
+
+		  };
+		})( jQuery );
+
+}
+catch(err){
+	//console.log('no jquery');
+}
+
+
+// MAIN FUNCTION
 	  
 function displayGoogleSheet(options){
 	var settings = {
@@ -19,12 +62,11 @@ function displayGoogleSheet(options){
 
 	if(settings.feedURL!="") var URL=feedURL;
 	else{ 
-		//var URL = 'https://spreadsheets.google.com/feeds/cells/'+settings.sheetsId+'/'+settings.sheetId+'/public/full?alt=json';
-	//var URL = 'https://spreadsheets.google.com/feeds/cells/'+settings.sheetsId+'/od6/public/full?alt=json';
+		
 		var protocol="https:";
 		if(location.protocol=="http:") protocol="http:";
-			var URL=protocol+'//spreadsheets.google.com/feeds/cells/'+settings.sheetsId+'/'+settings.sheetId+'/public/full?alt=json';
-			//console.log("URL: "+URL);
+		var URL=protocol+'//spreadsheets.google.com/feeds/cells/'+settings.sheetsId+'/'+settings.sheetId+'/public/full?alt=json';
+			
 	}
 	var dataResult;
 
@@ -38,7 +80,7 @@ function displayGoogleSheet(options){
 		var xhr = createCORSRequest('GET', URL);
 		  if (!xhr) {alert('CORS not supported');return;}
 		
-		  //xhr.onload = function() {appendResults(JSON.parse(xhr.responseText));};
+		  
 		  xhr.onload = function() {processResults(JSON.parse(xhr.responseText))};
 		  xhr.onerror = function() {alert('Error making the CORS request.');};
 		  xhr.onprogress=function(){};
@@ -63,9 +105,11 @@ function displayGoogleSheet(options){
 	}
 
 
-	//var resultsArrayObjByRow=function(results){
+	
 	var processResults=function(results){
-		if(results.feed.entry.length==0){console.log("No results"); return;}
+		//console.log('processResults: '+results);
+
+		if(results.feed.entry.length==0){/*console.log("No results");*/ return;}
 		if(settings.callback!=""){settings.callback(results); return;}
 
 		/*return simplified version:
@@ -75,8 +119,6 @@ function displayGoogleSheet(options){
 		]
 		*/
 		
-	
-		//var rowArray=new Array();
 		var currentRow=0;
 		var initRow=0;
 		var headerArray=new Array();
@@ -98,26 +140,24 @@ function displayGoogleSheet(options){
 				if(currentItem.gs$cell.row!=currentRow&&currentRow!=initRow&&currentRow!=0){
 
 					/* need to process the previous row */
-
 					/*Check to insure that there is an entry for each header */
 					for(j in headerArray){if(rowTempArray[headerArray[j]]==undefined){rowTempArray[headerArray[j]]=""}}
 
 					/*Push last row into rowObj*/
 					rowObj.push(rowTempArray);
 
-					/* REST rowTempArray */
 					rowTempArray=new Array();
 					
 					
-				} /* End if this is a new row */
+				} 
 				currentRow=currentItem.gs$cell.row;
 
-				/* Push obect into  rowTempArray*/
+				
 				rowTempArray[headerArray[currentItem.gs$cell.col]]=currentItem.content.$t;
 
-			} /* end else (aka not a header row) */
+			} 
 
-		}  /* end entry loop (i) */
+		}  
 
 		
 		
@@ -125,20 +165,16 @@ function displayGoogleSheet(options){
 		for(j in headerArray){if(rowTempArray[headerArray[j]]==undefined){rowTempArray[headerArray[j]]=""}}
 		rowObj.push(rowTempArray);
 
-
-		
-		//console.log(headerArray);
-
-		//return rowObj;
+	
 		
 		if(settings.callbackClean!=""){settings.callbackClean(rowObj); return;}
 		appendResults(rowObj);
 
 	};
 
-/* Displays table */
+/* Displays simple table */
 var appendResults=function(rowObj){
-	//console.log(rowObj);
+
 	var HTML = "<table>";
 	for(var i=0; i<rowObj.length;i++){
 		if(i==0){
@@ -156,21 +192,18 @@ var appendResults=function(rowObj){
 			HTML+="<td>"+rowObj[i][j]+"</td>";
 		}
 		HTML+="</tr>";
-
-		
-
 	}
 	HTML+="</table>";
+	
 	settings.containingObj.innerHTML = HTML;
+
 
 
 
 };
 
 	/**** INIT ****/
-
 	if(settings.sheetsId=="" && settings.feedURL=="" ){console.log('ERROR: No Sheets ID is defined');return}
 	else setURL();
-
 }
 	  

@@ -7,16 +7,30 @@
 
 <body>
 	<h1>Example Google Sheet</h1>
+
+	<h2>Simple example</h2>
 	<div id="results-SampleSheet"></div>
+	<hr >
+	<h2>Callback example</h2>
 
 	<div id="results-SampleSheet2"></div>
 
+	<hr >
+
+	<h2>Jquery example</h2>
+	<div id="results-SampleSheet3"></div>
 
 
+	<hr>
+	<div> <p>END of examples</p></div>
 
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script type="text/javascript" src="Sheets-API-Object.js"></script>
 	<script>
+
+
+
+	// Simple Example
 	displayGoogleSheet({
 			'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
 			'sheetId':'od6',
@@ -24,6 +38,7 @@
 		});
 
 
+	//Callback example
 	displayGoogleSheet({
 			'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
 			'sheetId':'od6',
@@ -31,11 +46,11 @@
 				console.log(cleanResults);
 				var HTML="<ul>";
 				/*return simplified version:
-					[
+						[
 						{'column':'data row1', 'column','data row1', 'column':'data row1'},  
 						{'column':'data row2', 'column','data row2', 'column':'data row2'},   ...
-					]
-				*/
+					]*/
+				
 				for(var i=0;i<cleanResults.length;i++){
 					HTML+="<li>"+cleanResults[i].Color+" "+cleanResults[i].Number+"</li>";
 				}
@@ -44,6 +59,12 @@
 
 			}
 		});
+
+	//jQuery example
+	$('#results-SampleSheet3').displayGoogleSheet({
+		'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
+		'success':function(){console.log("success using jQuery plugin");}
+	}).css('background-color','#fcc');
 	</script>
 </body>
 
