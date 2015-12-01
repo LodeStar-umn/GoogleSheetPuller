@@ -118,13 +118,6 @@ Simple Example:
 
 ###jQuery Plugin options:
 
-
-
-'sheetsId':'', // ID of the Google spreadsheet file 
-				'sheetId':'od6', //ID of the individual sheet.  Defaults to the first sheet
-				'success':'', //  callback to be used to display the JSON feed from Google
-				'feedURL':'' /
-				
 **sheetsID**: REQUIRED - the spreadsheet ID of the file you want to display.
 
 **sheetId**: OPTIONAL - the sheet ID that contains the data.  Defaults to the first sheet in a spreadsheet file (od6).
