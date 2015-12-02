@@ -3,7 +3,7 @@
 
 // Kim Doberstein 
 // University of Minnesota
-// Version 0.5
+// Version 0.6
 
 
 // JQUERY PLUGIN
