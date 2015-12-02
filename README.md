@@ -9,7 +9,7 @@ Note this uses the unauthenticated API and should NOT be used for non-public inf
 displayGoogleSheet does not require jQuery or any other javascript framework.
 
 ## Simple displayGoogleSheet example
-The following will display the first sheet (aka tab) in the worksheet (aka a Google sheet file) with the following worksheetID: 1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg
+The following will display the first sheet (aka tab) in the worksheet (aka a Google sheet file) with the following document ID: 1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg
 
 	<!doctype html>
 	<html lang="en">
@@ -21,10 +21,10 @@ The following will display the first sheet (aka tab) in the worksheet (aka a Goo
 		<h1>Example Google Sheet</h1>
 		<div id="results-SampleSheet"></div>
 
-	<script type="text/javascript" src="Sheets-API-Object.js"></script>
+	<script type="text/javascript" src="displayGoogleSheet.js"></script>
 	<script>
 		displayGoogleSheet({
-			'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
+			'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
 			'containingObj':document.getElementById('results-SampleSheet')} 
 		);
 	</script>
@@ -38,7 +38,7 @@ Once the new displayGoogleSheet object is created, there is an AJAX call to get 
 ##Options:
 There are numerous options that can be passed to the displayGoogleSheet object:
 
-**sheetsID**: REQUIRED - the spreadsheet ID of the file you want to display.
+**docId**: REQUIRED - the document ID of the file you want to display.
 
 **containingObj**: OPTIONAL - the DOM object where the results will be displayed.  Defaults to the body tag.
 
@@ -48,15 +48,15 @@ There are numerous options that can be passed to the displayGoogleSheet object:
 
 **callbackClean**: OPTIONAL - function that is executed when the data is returned.  This function must use a "cleaned up" version of the data returned (see below).
 
-**feedURL**: OPTIONAL - instead of supplying the sheetsID and sheetID, you can just suppy the full API url. Note: If you use the option, then the sheetsID is not required.
+**feedURL**: OPTIONAL - instead of supplying the docId and sheetId, you can just suppy the full API url. Note: If you use the option, then the docId is not required.
 
 
 ##callbackClean
 A single parameter is supplied to this function - a simplified array of the data in the format of:
 	
 	[
-		{'column':'data row1', 'column','data row1', 'column':'data row1'},  
-		{'column':'data row2', 'column','data row2', 'column':'data row2'},   ...
+		{'column':'data row1', 'column':'data row1', 'column':'data row1'},  
+		{'column':'data row2', 'column':'data row2', 'column':'data row2'},   ...
 	]
 
 The 'column' index is the text in the first row of that column. For example the following table:
@@ -71,9 +71,9 @@ Yellow | ffff00
 Will be in the format of:
 
 	[
-		{'Color':'Red', 'Number','ff0000'},  
-		{'Color':'Orange', 'Number','ff9900'}, 
-		{'Color':'Yellow', 'Number','ffff00'}
+		{'Color':'Red', 'Number':'ff0000'},  
+		{'Color':'Orange', 'Number':'ff9900'}, 
+		{'Color':'Yellow', 'Number':'ffff00'}
 	]
 
 Here is a simple example:
@@ -88,11 +88,11 @@ Here is a simple example:
 	<body>
 		<h1>Example Google Sheet</h1>
 		<div id="results-SampleSheet"></div>
-		<script type="text/javascript" src="Sheets-API-Object.js"></script>
+		<script type="text/javascript" src="displayGoogleSheet.js"></script>
 		<script>
 		
 			displayGoogleSheet({
-				'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
+				'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
 				'callbackClean':function(cleanResults){
 					var HTML="<ul>";
 					for(var i=0;i<cleanResults.length;i++){
@@ -112,17 +112,17 @@ While jQuery is not required for displayGoogleSheet to work, if it is available,
 Simple Example:
 
 	('#results-SampleSheet3').displayGoogleSheet({
-		'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
+		'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
 		'success':function(){console.log("success using jQuery plugin");}
 	})
 
 ###jQuery Plugin options:
 
-**sheetsID**: REQUIRED - the spreadsheet ID of the file you want to display.
+**docID**: REQUIRED - the spreadsheet ID of the file you want to display.
 
 **sheetId**: OPTIONAL - the sheet ID that contains the data.  Defaults to the first sheet in a spreadsheet file (od6).
 
-**feedURL**: OPTIONAL - instead of supplying the sheetsID and sheetID, you can just suppy the full API url. Note: If you use the option, then the sheetsID is not required.
+**feedURL**: OPTIONAL - instead of supplying the docId and sheetId, you can just supply the full API url. Note: If you use the option, then the docID is not required.
 
 **success**: OPTIONAL - function that is executed when the insertion of the simple table into the daisychained DOM object is complete.
 
@@ -145,18 +145,61 @@ A given sheet must be published in order for this to work properly.  Note, makin
 4.  Usually you want the "Automatically republish when chagnes are made" checkbox checked.
 5.  Click on "Publish"
 
-##Getting a spreadsheet id:
-You will need the spreadsheet id in order to use the displayGoogleSheet object.  The easiest way to get the spreadsheet id is to open the file in a browser and look at the URL.  The spreadsheet id is the long list alphanumeric string at the end of the url.
+##Getting a document id:
+You will need the document id in order to use the displayGoogleSheet object.  The easiest way to get the document id is to open the file in a browser and look at the URL.  The document id is the long list alphanumeric string at the end of the url.
 
 For example, if the URL for the sheet is:
 https://docs.google.com/spreadsheets/d/1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg/edit
 
-Then the spreadsheet ID is: 1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg
+Then the document ID is: 1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg
 
-##Sheet listing API:
+
+##Getting a sheet id:
+There is a helper method to easily get the sheet IDs of published sheets within a spreadsheet file.
+
+The following will display the following document ID: 1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg in a browser's console:
+
+	<!doctype html>
+	<html lang="en">
+	<head>
+  		<title>Example Google Sheet</title>
+	</head>
+
+	<body>
+		
+
+	<script type="text/javascript" src="displayGoogleSheet.js"></script>
+	<script>
+		displayGoogleSheet_GetSheetIDs({
+			'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg'
+			,'callback':function(results){console.log(results)
+		})
+	</script>
+
+	</body>
+	</html>
+
+
+This helper function will return a JSON object in a callback parameter in the following format:
+
+	[
+			{	'sheetName':'sheetName for tab 1', 
+				'sheetId':'sheetId for tab 1', 
+				'url':'url for tab 1'
+			},  
+			{	'sheetName':'sheetName for tab 2', 
+				'sheetId':'sheetId for tab 2', 
+				'url':'url for tab 2'
+			}, 
+			    ...
+		]
+
+
+###Sheet listing API:
+
 There is an API (XML or JSON )to get a listing of individual published sheets in a spreadsheet file.
 
-https://spreadsheets.google.com/feeds/worksheets/SPREADSHEETID/public/full
+https://spreadsheets.google.com/feeds/worksheets/DOCUMENTID/public/full
 
 Will return the XML, you can add the following parameters at the end to get JSON:
 
@@ -166,7 +209,7 @@ While this API isn't used in the displayGoogleSheet object, it is handy to get t
 
 Example: https://spreadsheets.google.com/feeds/worksheets/1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg/public/full?alt=json
 
-###Getting the sheet id:
+
 Looking at the sheet listing API results is the only reliable way to get an id of an individual sheet in a spreadsheet file is to use the sheet listing API.  The sheet ID is listed at the end of the entry ID url.  In the following example "od6" is the sheet id.
 
 JSON:
@@ -184,7 +227,7 @@ XML:
 ##Sheet data API
 The API to get the data in an individual published sheet is:
 
-https://spreadsheets.google.com/feeds/cells/SPREADSHEETID/SHEETID/public/full
+https://spreadsheets.google.com/feeds/cells/DOCUMENTID/SHEETID/public/full
 
 this will return the XML, you can add the following parameters at the end to get JSON:
 

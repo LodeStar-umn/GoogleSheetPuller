@@ -8,6 +8,9 @@
 <body>
 	<h1>Example Google Sheet</h1>
 
+	<h2>List of Sheet IDs</h2>
+	<div id="listSheetIDs"></div>
+	<hr>
 	<h2>Simple example</h2>
 	<div id="results-SampleSheet"></div>
 	<hr >
@@ -25,14 +28,39 @@
 	<div> <p>END of examples</p></div>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script type="text/javascript" src="Sheets-API-Object.js"></script>
+	<script type="text/javascript" src="displayGoogleSheet.js"></script>
 	<script>
+
+
+
+
+	// Get list of sheet Ids
+	displayGoogleSheet_GetSheetIDs({
+		'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg'
+		,'callback':function(results){
+			var html="<table><tr><th>sheetId</th><th>Sheet Name</th><th>Sheet API URL</th></tr>";
+			for(var i=0;i<results.length;i++){
+				html+="<tr>";
+				html+="<td>"+results[i].sheetId+"</td>";
+				html+="<td>"+results[i].sheetName+"</td>";
+				html+="<td><a href='"+results[i].url+"'>"+results[i].url+"</a></td>";
+				html+="</tr>";
+			}
+			html+="</table>";
+
+			document.getElementById('listSheetIDs').innerHTML=html;
+
+
+
+		}
+
+	})
 
 
 
 	// Simple Example
 	displayGoogleSheet({
-			'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
+			'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
 			'sheetId':'od6',
 			'containingObj':document.getElementById('results-SampleSheet')
 		});
@@ -40,7 +68,7 @@
 
 	//Callback example
 	displayGoogleSheet({
-			'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
+			'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
 			'sheetId':'od6',
 			'callbackClean':function(cleanResults){
 				console.log(cleanResults);
@@ -60,11 +88,17 @@
 			}
 		});
 
+
 	//jQuery example
 	$('#results-SampleSheet3').displayGoogleSheet({
-		'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
+		'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
 		'success':function(){console.log("success using jQuery plugin");}
-	}).css('background-color','#fcc');
+	}).css('background-color','#fcc'); 
+
+
+
+
+
 	</script>
 </body>
 
