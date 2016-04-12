@@ -23,7 +23,7 @@ function displayGoogleSheet(options){
 		,'timeout':'' //function called on timeout 
 		,'callback':function(){}
 		,'noResults':function(){console.log('no results returned')}
-		,'noResultsString':"No events available."
+		,'noResultsString':"No data available."
 		,'helpersObj':displayGoogleSheetHelper
 		,'customFormatting':'' //function called to get formatted HTML
 		,'getData':'' //function called when user only wants the json returned
@@ -203,12 +203,12 @@ function getGoogleSheetList(options){
 		,'noResults':function(){console.log('no results returned')} 
 		,'helpersObj':displayGoogleSheetHelper
 		,'getData':'' //function called when user only wants the json returned
-		,'getDataClean':function(json){return json}
+		,'getDataClean':function(json){console.log(JSON.stringify(json))}
 		,'testing':false
 
 		//Currently not used but included for future use
 		,'containingObj':document.getElementsByTagName('body')[0]
-		,'noResultsString':"No events available."
+		,'noResultsString':"No data available."
 		,'customFormatting':'' //function called to get formatted HTML
 
 	};
@@ -263,6 +263,8 @@ function getGoogleSheetList(options){
 						
 			sheetArray.push(rowTempArray);
 		}
+
+		if(settings.testing==true){ console.log("sheetArray "+sheetArray)}
 		
 		settings.getDataClean(sheetArray);
 		settings.callback();

@@ -32,12 +32,14 @@
 	<script>
 
 
+	// Get list of sheet Ids and place in the console.
+	getGoogleSheetList({'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg'});
 
 
-	// Get list of sheet Ids
+	// Get list of sheet Ids and display above
 	getGoogleSheetList({
 		'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg'
-		,'testing':true
+		,'testing':false
 		,'getDataClean':function(results){
 			var html="<table><tr><th>sheetId</th><th>Sheet Name</th><th>Sheet API URL</th></tr>";
 			for(var i=0;i<results.length;i++){
