@@ -35,9 +35,10 @@
 
 
 	// Get list of sheet Ids
-	displayGoogleSheet_GetSheetIDs({
-		'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg'
-		,'callback':function(results){
+	getGoogleSheetList({
+		'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg'
+		,'testing':true
+		,'getDataClean':function(results){
 			var html="<table><tr><th>sheetId</th><th>Sheet Name</th><th>Sheet API URL</th></tr>";
 			for(var i=0;i<results.length;i++){
 				html+="<tr>";
@@ -70,8 +71,8 @@
 	displayGoogleSheet({
 			'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
 			'sheetId':'od6',
-			'callbackClean':function(cleanResults){
-				console.log(cleanResults);
+			'getDataClean':function(cleanResults){
+				//console.log(cleanResults);
 				var HTML="<ul>";
 				/*return simplified version:
 						[
@@ -83,6 +84,7 @@
 					HTML+="<li>"+cleanResults[i].Color+" "+cleanResults[i].Number+"</li>";
 				}
 				HTML+="</ul>";
+				
 				document.getElementById('results-SampleSheet2').innerHTML=HTML;
 
 			}
