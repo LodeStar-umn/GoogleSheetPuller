@@ -40,9 +40,9 @@ There are numerous options that can be passed to the displayGoogleSheet object. 
 
 **docId**: REQUIRED - the document ID of the file you want to display.
 
-**containingObj**: OPTIONAL - the DOM object where the results will be displayed.  Defaults to the body tag.
+**containingObj**: the DOM object where the results will be displayed.  Defaults to the body tag.
 
-**sheetId**: OPTIONAL - the sheet ID that contains the data.  Defaults to the first sheet in a spreadsheet file (od6).
+**sheetId**: the sheet ID that contains the data.  Defaults to the first sheet in a spreadsheet file (od6).
 
 ================
 
@@ -258,7 +258,7 @@ You do not need to know this url in order to use the displayGoogleSheet object, 
 ================
 
 ##Changes to version 0.6.1
-   * Callback is now only called when the code is complete. If there is a need to do custom formatting of returned data, see new options below.
+   * Callback is now only called when the code is complete.
    
    * CallbackClean has been removed. 
    
@@ -267,9 +267,13 @@ You do not need to know this url in order to use the displayGoogleSheet object, 
       * getDataClean
       * customFormatting
       
-   * Other options added to more closely match other Google Puller function
+   * Other options added to more closely match other Google Puller functions
    
    * displayGoogleSheet_GetSheetIDs method renamed to getGoogleSheetList and additional options added.
+   
+   * GetSheetIDHelper.htmle added to more easily get document and sheet IDs
+   
+   * Addition of simple test html pages
    
    * Readme update.
 
