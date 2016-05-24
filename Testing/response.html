@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Google Sheet Puller Testing Files</title>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> 
+<script type="text/javascript" src="../displayGoogleSheet.js"></script>
+<script src="tv4.js"></script>
+</head>
+
+<body>
+
+
+
+<h1>Response</h1>
+
+<h2>1. Insure getData does nothing with the results and is in the correct full "Google" format</h2>
+<p class="directions">JSON should be displayed in the first box (blue border), and the text "stay empty" in the second (red border)</p>
+
+
+<div id="test1_1-actual" class="actual" style="border:3px solid #f00; padding:10px;">
+	loading
+</div>
+<div id="test1_2-actual" class="actual" style="border:3px solid #00f; padding:10px;">
+	stay empty
+</div>
+<div>
+	Correct format: <span id="test1_3-actual" class="actual">loading</span>
+</div>
+
+
+<script>
+	var schema1 = {"$schema":"http://json-schema.org/draft-04/schema#","type":"object","properties":{"version":{"type":"string"},"encoding":{"type":"string"},"feed":{"type":"object","properties":{"xmlns":{"type":"string"},"xmlns$openSearch":{"type":"string"},"xmlns$batch":{"type":"string"},"xmlns$gs":{"type":"string"},"id":{"type":"object","properties":{"$t":{"type":"string"}},"required":["$t"]},"updated":{"type":"object","properties":{"$t":{"type":"string"}},"required":["$t"]},"category":{"type":"array","items":{"type":"object","properties":{"scheme":{"type":"string"},"term":{"type":"string"}},"required":["scheme","term"]}},"title":{"type":"object","properties":{"type":{"type":"string"},"$t":{"type":"string"}},"required":["type","$t"]},"link":{"type":"array","items":{"type":"object","properties":{"rel":{"type":"string"},"type":{"type":"string"},"href":{"type":"string"}},"required":["rel","type","href"]}},"author":{"type":"array","items":{"type":"object","properties":{"name":{"type":"object","properties":{"$t":{"type":"string"}},"required":["$t"]},"email":{"type":"object","properties":{"$t":{"type":"string"}},"required":["$t"]}},"required":["name","email"]}},"openSearch$totalResults":{"type":"object","properties":{"$t":{"type":"string"}},"required":["$t"]},"openSearch$startIndex":{"type":"object","properties":{"$t":{"type":"string"}},"required":["$t"]},"gs$rowCount":{"type":"object","properties":{"$t":{"type":"string"}},"required":["$t"]},"gs$colCount":{"type":"object","properties":{"$t":{"type":"string"}},"required":["$t"]},"entry":{"type":"array","items":{"type":"object","properties":{"id":{"type":"object","properties":{"$t":{"type":"string"}},"required":["$t"]},"updated":{"type":"object","properties":{"$t":{"type":"string"}},"required":["$t"]},"category":{"type":"array","items":{"type":"object","properties":{"scheme":{"type":"string"},"term":{"type":"string"}},"required":["scheme","term"]}},"title":{"type":"object","properties":{"type":{"type":"string"},"$t":{"type":"string"}},"required":["type","$t"]},"content":{"type":"object","properties":{"type":{"type":"string"},"$t":{"type":"string"}},"required":["type","$t"]},"link":{"type":"array","items":{"type":"object","properties":{"rel":{"type":"string"},"type":{"type":"string"},"href":{"type":"string"}},"required":["rel","type","href"]}},"gs$cell":{"type":"object","properties":{"row":{"type":"string"},"col":{"type":"string"},"inputValue":{"type":"string"},"$t":{"type":"string"}},"required":["row","col","inputValue","$t"]}},"required":["id","updated","category","title","content","link","gs$cell"]}}},"required":["xmlns","xmlns$openSearch","xmlns$batch","xmlns$gs","id","updated","category","title","link","author","openSearch$totalResults","openSearch$startIndex","gs$rowCount","gs$colCount","entry"]}},"required":["version","encoding","feed"]}
+
+	displayGoogleSheet({
+			'feedURL':'fixtures/simpleTable.json'
+			,'getData':function(results){
+				$('#test1_1-actual').html(JSON.stringify(results));
+				$('#test1_3-actual').html(tv4.validate(results, schema1));
+			}
+			,'containingObj':$('#test1_2-actual')
+		});
+
+</script>
+
+
+
+<!-- *************************************************** -->
+<hr >
+<!-- *************************************************** -->
+
+<h2>2. Insure getDataClean does nothing with the results and is in the correct "clean" format</h2>
+<p class="directions">JSON should be displayed in the first box (blue border), and the text "stay empty" in the second (red border)</p>
+
+
+<div id="test2_1-actual" class="actual" style="border:3px solid #f00; padding:10px;">
+	loading
+</div>
+<div id="test2_2-actual" class="actual" style="border:3px solid #00f; padding:10px;">
+	stay empty
+</div>
+<div>
+	Correct format: <span id="test2_3-actual" class="actual">loading</span>
+</div>
+
+
+<script>
+	
+	var schema2={"$schema":"http://json-schema.org/draft-04/schema#","type":"array","items":{"type":"object","properties":{"Color":{"type":"string"},"Number":{"type":"string"}},"required":["Color","Number"]}};
+
+	displayGoogleSheet({
+			'feedURL':'fixtures/simpleTable.json'
+			,'getDataClean':function(results){
+				$('#test2_1-actual').html(JSON.stringify(results));
+				$('#test2_3-actual').html(tv4.validate(results, schema2));
+			}
+			,'containingObj':$('#test2_2-actual')
+		});
+
+</script>
+
+
+<!-- *************************************************** -->
+<hr >
+<!-- *************************************************** -->
+
+<h2>3. Insure script responds correctly when there are no results</h2>
+<p class="directions">"<span id="test3_setErrorText"></span>" should be displayed in the first box (blue border): , and "<span id="test3_errorFunctionText"></span>" in the second (red border)</p>
+
+
+<div id="test3_1-actual" class="actual" style="border:3px solid #f00; padding:10px;">
+	loading
+</div>
+<div id="test3_2-actual" class="actual" style="border:3px solid #00f; padding:10px;">
+	loading
+</div>
+
+
+
+<script>
+var test3_setErrorText="Sadly, there are no events available.";
+var test3_errorFunctionText="Oh Snap, time to make some plans.";
+
+$('#test3_setErrorText').html(test3_setErrorText);
+$('#test3_errorFunctionText').html(test3_errorFunctionText);
+displayGoogleSheet({
+		'feedURL':'fixtures/noResults.json'
+		,'containingObj':document.getElementById('test3_1-actual')
+		,'noResults':function(){
+			$('#test3_2-actual').html(test3_errorFunctionText);
+		}
+		,'noResultsString':test3_setErrorText
+	}
+);
+
+
+
+</script>
+
+<!-- *************************************************** -->
+<hr >
+<!-- *************************************************** -->
+
+<h2>4. Insure customFormatting is called correctly</h2>
+<p class="directions">JSON should be displayed in the first box (blue border), and the text "customFormatting complete" in the second (red border)</p>
+
+
+<div id="test4_1-actual" class="actual" style="border:3px solid #f00; padding:10px;">
+	loading
+</div>
+
+<div id="test4_2-actual" class="actual" style="border:3px solid #00f; padding:10px;">
+	loading
+</div>
+<div class="actual">Object should be sent to customFormatting:<span id="test4_3-actual">loading</span></div>
+<div class="actual">There should be <span id="test4_4-expected">6</span> items: <span id="test4_4-actual">loading</span></div>
+
+<script>
+displayGoogleSheet({
+		 'feedURL':'fixtures/simpleTable.json'
+		,'containingObj':document.getElementById('test4_2-actual')
+		,'customFormatting':function(results){
+			$('#test4_3-actual').html(typeof results);
+			$('#test4_4-actual').html(results.length);
+			$('#test4_1-actual').html(
+				JSON.stringify(results)
+			);
+			return "customFormatting complete";
+		}	
+	}
+);
+
+
+</script>
+
+
+<!-- *************************************************** -->
+<hr >
+<!-- *************************************************** -->
+
+
+<h2>5. Insure if no customFormatting is called, results uses default formatting</h2>
+<p class="directions">The following two entries should match.</p>
+
+
+<div id="test5-expected" class="expected">
+	<table>
+		<thead>
+			<tr>
+				<th>Color</th>
+				<th>Number</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Red</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Orange</td>
+				<td>ff9900</td>
+			</tr>
+			<tr>
+				<td>Yellow</td>
+				<td>ffff00</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>00ff00</td>
+			</tr>
+			<tr>
+				<td>Blue</td>
+				<td>0000ff</td>
+			</tr>
+			<tr>
+				<td>Violet</td>
+				<td>ff00ff</td>
+			</tr>
+		</tbody>
+	</table>
+
+</div>
+
+<div id="test5-actual" class="actual">
+	loading
+</div>
+
+<script>
+displayGoogleSheet({
+		 'feedURL':'fixtures/simpleTable.json'
+		,'containingObj':document.getElementById('test5-actual')
+	});
+
+
+</script>
+
+<!-- *************************************************** -->
+<hr >
+<!-- *************************************************** -->
+
+
+<h2>6. Insure callback is called after HTML insertion</h2>
+<p class="directions">The first box should contain a table of data and the second box should contain the following text: <span id="test6_2-expected">We are now done.</span></p>
+
+
+<div id="test6_1-actual" class="actual">
+	loading
+</div>
+
+<div id="test6_2-actual" class="actual">
+	loading
+</div>
+
+
+
+<script>
+
+
+displayGoogleSheet({
+		 'feedURL':'fixtures/simpleTable.json'
+		,'containingObj':document.getElementById('test6_1-actual')
+		,'callback':function(){
+			$('#test6_2-actual').html($('#test6_2-expected').html());
+		}
+	});
+
+</script>
+
+<!-- *************************************************** -->
+<hr >
+<!-- *************************************************** -->
+
+
+<h2>7. Data is displayed correctly when there are spaces in the header row</h2>
+<p class="directions">The first box should contain a table of data.</p>
+
+
+<div id="test7-actual" class="actual">
+	loading
+</div>
+
+
+
+<script>
+
+displayGoogleSheet({
+		 'feedURL':'fixtures/simpleTable-Space-in-Header.json'
+		,'containingObj':document.getElementById('test7-actual')
+		//,'getData':function(response){console.log(JSON.stringify(response));}
+		
+	});
+</script>
+</body>
+</html>

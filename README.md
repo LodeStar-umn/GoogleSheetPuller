@@ -36,22 +36,42 @@ Once the new displayGoogleSheet object is created, there is an AJAX call to get 
 
 
 ##Options:
-There are numerous options that can be passed to the displayGoogleSheet object:
+There are numerous options that can be passed to the displayGoogleSheet object.  Note - all options are optional unless marked.
 
 **docId**: REQUIRED - the document ID of the file you want to display.
 
-**containingObj**: OPTIONAL - the DOM object where the results will be displayed.  Defaults to the body tag.
+**containingObj**: the DOM object where the results will be displayed.  Defaults to the body tag.
 
-**sheetId**: OPTIONAL - the sheet ID that contains the data.  Defaults to the first sheet in a spreadsheet file (od6).
+**sheetId**: the sheet ID that contains the data.  Defaults to the first sheet in a spreadsheet file (od6).
 
-**callback**: OPTIONAL - function that is executed when the data is returned.  This function must include the display logic using the data as formatted from Google.
+================
 
-**callbackClean**: OPTIONAL - function that is executed when the data is returned.  This function must use a "cleaned up" version of the data returned (see below).
+**timeout**: Function called if the request times out.
+ 
+**noResults**: Function called if no results are returned.
 
-**feedURL**: OPTIONAL - instead of supplying the docId and sheetId, you can just suppy the full API url. Note: If you use the option, then the docId is not required.
+**noResultsString**: Text displayed if there are no results. Set to "" if no text is wanted.  Defaults to "No data available."
+
+**getData**: When supplied, this function is called instead of entries being inserted into the DOM.  The JSON as formatted from Google is the only parameter.
+
+**getDataClean**: When supplied, this function is called instead of entries being inserted into the DOM.  A simplifed version of the returned JSON is the only parameter. See below for more information.
+
+**customFormatting**: Function called when a custom formatting or HTML structure is wanted.  The blog entries JSON is the only parameter.  This function MUST return the HTML that is to be inserted into the DOM.
+
+**callback**: Function called when the events HTML is inserted into the DOM.
+
+================
+
+**feedURL**: If you know the full url for the JSON Google sheets api, it can be passed with this option instead of providing the sheetId and docId (see above).  The use of this option isn't recommended for normal use.
+
+**testing**: Defaulted to false.  If set to true, some additional debugging lines will be run.  The use of this option isn't recommended for normal use.
 
 
-##callbackClean
+**helpersObj**: At the bottom of the displayGoogleSheet.js file there is an object that holds helper functions.  The name of object that holds the helper functions can be changed with this option.   The use of this option isn't recommended for normal use.
+
+
+
+##getDataClean
 A single parameter is supplied to this function - a simplified array of the data in the format of:
 	
 	[
@@ -93,7 +113,7 @@ Here is a simple example:
 		
 			displayGoogleSheet({
 				'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg',
-				'callbackClean':function(cleanResults){
+				'getDataClean':function(cleanResults){
 					var HTML="<ul>";
 					for(var i=0;i<cleanResults.length;i++){
 						HTML+="<li>"+cleanResults[i].Color+" "+cleanResults[i].Number+"</li>";
@@ -116,19 +136,13 @@ Simple Example:
 		'success':function(){console.log("success using jQuery plugin");}
 	})
 
-###jQuery Plugin options:
-
-**docID**: REQUIRED - the spreadsheet ID of the file you want to display.
-
-**sheetId**: OPTIONAL - the sheet ID that contains the data.  Defaults to the first sheet in a spreadsheet file (od6).
-
-**feedURL**: OPTIONAL - instead of supplying the docId and sheetId, you can just supply the full API url. Note: If you use the option, then the docID is not required.
-
-**success**: OPTIONAL - function that is executed when the insertion of the simple table into the daisychained DOM object is complete.
 
 
-
-
+##Version Number
+You can easily get the version number of the displayGoogleCal by entering the following in the browser console:
+	
+	displayGoogleSheet('version');
+	
 ================
 ================
 ================
@@ -170,9 +184,9 @@ The following will display the following document ID: 1JgVXA3ud90wpxqMmwMsc1ejlL
 
 	<script type="text/javascript" src="displayGoogleSheet.js"></script>
 	<script>
-		displayGoogleSheet_GetSheetIDs({
-			'sheetsId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg'
-			,'callback':function(results){console.log(results)
+		getGoogleSheetList({
+			'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg'
+			,'getDataClean':function(results){console.log(results)}
 		})
 	</script>
 
@@ -193,6 +207,8 @@ This helper function will return a JSON object in a callback parameter in the fo
 			}, 
 			    ...
 		]
+
+If only a docId is passed to getGoogleSheetList, then the JSON results will be displayed in the console.
 
 
 ###Sheet listing API:
@@ -240,6 +256,26 @@ You do not need to know this url in order to use the displayGoogleSheet object, 
 ================
 ================
 ================
+
+##Changes to version 0.6.1
+   * Callback is now only called when the code is complete.
+   
+   * CallbackClean has been removed. 
+   
+   * Added the following options to easily allow for custom formatting/processing of results
+      * getData
+      * getDataClean
+      * customFormatting
+      
+   * Other options added to more closely match other Google Puller functions
+   
+   * displayGoogleSheet_GetSheetIDs method renamed to getGoogleSheetList and additional options added.
+   
+   * GetSheetIDHelper.htmle added to more easily get document and sheet IDs
+   
+   * Addition of simple test html pages
+   
+   * Readme update.
 
 
 ##Known Issues

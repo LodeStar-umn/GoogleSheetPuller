@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Get Sheet ID Helper</title>
+
+  <style>
+  body{
+  	font-family: Helvetica,'Helvetica Neue','Futura',Verdana,'Geneva', Arial, sans-serif;  }
+  	#results div{padding-top:15px;}
+  	table{border-collapse: collapse;}
+  	td,th{padding:10px; border:1px solid #333;}
+
+  </style>
+
+
+</head>
+
+<body>
+<h1>Get Google Sheet Doc ID and Sheet IDs</h1>
+<div>
+<label>Enter the full URL for a Google Sheet: <input type="text" id="docURL" ></label>
+<input type="button" value="Get Sheet IDs" id="getSheetButton">
+</div>
+
+<hr>
+<div id="results" style="display:none">
+	<div>Document Id: <span id="docId"></span><div>
+	<div id="resultsTable"></div>
+
+</div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="displayGoogleSheet.js"></script>
+
+	<script>
+
+	$('#getSheetButton').click(function(){
+		var docURL=$('#docURL').val();
+		//https://docs.google.com/spreadsheets/d/1ad5UeSVVPau1yfh7BLP0z1JepkGNyvTvUkuqhRLn7B4/edit#gid=0
+
+		var pattern = /http[s]*:\/\/docs.google.com\/spreadsheets\/[^\/]+\/(([^\/]*))\//g;
+
+		var result = pattern.exec(docURL);
+	
+
+		if(result!=null && typeof result[1] !=undefined && result[1]!=null){
+			$('#results').show();
+			var docId=result[1];
+			$('#docId').html(docId);
+
+			getGoogleSheetList({
+				//'docId':'1JgVXA3ud90wpxqMmwMsc1ejlLsTKjjZKW5aDtZzB-Qg'
+				'docId':docId
+				,'testing':false
+				,'getDataClean':function(results){
+					var html="<table><tr><th>sheetId</th><th>Sheet Name</th><th>Sheet API XML</th><th>Sheet API JSON</th></tr>";
+					for(var i=0;i<results.length;i++){
+						html+="<tr>";
+						html+="<td>"+results[i].sheetId+"</td>";
+						html+="<td>"+results[i].sheetName+"</td>";
+						html+="<td><a href='"+results[i].url+"' target='_blank'>XML</a></td>";
+						html+="<td><a href='"+results[i].url+"?alt=json' target='_blank'>JSON</a></td>";
+						html+="</tr>";
+					}
+					html+="</table>";
+
+					document.getElementById('resultsTable').innerHTML=html;
+
+
+
+				}
+
+			})
+			
+
+		}
+
+		else{
+			alert("Entered URL doesn't appear to be a valid Google Sheet URL.");
+		}
+
+	})
+
+	</script>
+	
+</body>
+
+</html>
