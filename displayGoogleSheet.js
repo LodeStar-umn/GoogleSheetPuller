@@ -13,22 +13,24 @@
 // MAIN FUNCTION
 	  
 function displayGoogleSheet(options){
-	var version="displayGoogleSheet version: 0.6.1";
+	var version="0.6.1";
+
 	var settings = {
 		'docId':'' // ID of the Google spreadsheet file 
 		,'sheetId':'od6' //ID of the individual sheet.  Defaults to the first sheet
 		,'feedURL':''
 		,'containingObj':document.getElementsByTagName('body')[0]
-		,'error':'' //function called on error (and on timeout if a separate timeout is not provided)
+		,'error':function(){console.log('an error has happened');} //function called on error (and on timeout if a separate timeout is not provided)
 		,'timeout':'' //function called on timeout 
 		,'callback':function(){}
 		,'noResults':function(){console.log('no results returned')}
-		,'noResultsString':"No data available."
+		,'noResultsString':"No content is available."
 		,'helpersObj':displayGoogleSheetHelper
 		,'customFormatting':'' //function called to get formatted HTML
 		,'getData':'' //function called when user only wants the json returned
 		,'getDataClean':'' //
 		,'testing':false
+		,'testingArea':'' // options include 'url'
 
 		/// (from older versions of code )
 		,'sheetsId':'' // Same as docId(older version of code)
@@ -53,7 +55,10 @@ function displayGoogleSheet(options){
 
 		}
 
-		if(settings.testing===true) console.log("url: "+settings.feedURL);
+		if(settings.testing===true){
+			console.log("url: "+settings.feedURL);
+			if(settings.testingArea=="url") return settings.feedURL;
+		}
 
 		settings.helpersObj.makeCORSRequest({
 			'url':settings.feedURL
@@ -97,7 +102,7 @@ function displayGoogleSheet(options){
 		var initRow=0;
 		var headerArray=new Array();
 		var rowObj=new Array();
-		var rowTempArray=new Array();
+		var rowTempArray={};//new Array();
 		
 		for (var i = 0; i < results.feed.entry.length; i++) {
 			var currentItem = results.feed.entry[i];
@@ -120,7 +125,7 @@ function displayGoogleSheet(options){
 					/*Push last row into rowObj*/
 					rowObj.push(rowTempArray);
 
-					rowTempArray=new Array();
+					rowTempArray={};//new Array();
 					
 					
 				} 
@@ -166,14 +171,15 @@ function displayGoogleSheet(options){
 					HTML+="</tr></thead>";
 
 				}
-				
+				if(i==1) HTML+="<tbody>";
+
 				HTML+="<tr>";
 				for(j in rowObj[0]){
 					HTML+="<td>"+rowObj[i][j]+"</td>";
 				}
 				HTML+="</tr>";
 			}
-			HTML+="</table>";
+			HTML+="</tbody></table>";
 		}
 		settings.containingObj.innerHTML = HTML;
 		settings.callback();
@@ -184,10 +190,13 @@ function displayGoogleSheet(options){
 
 	/**** INIT ****/
 	//Version
-	if(settings.testing===true || options=="version")console.log(version);
-	if(options=="version")return; // user just wanted version - end
+	if(settings.testing===true || options=="version"){
+		console.log("displayGoogleSheet version: "+version);
+		if(options=="version")return version;
+	}
+	
 	if(settings.docId=="" && settings.feedURL=="" ){console.log('ERROR: No Document ID is defined');return}
-	init();
+	return init();
 }
 
 
@@ -201,6 +210,7 @@ function getGoogleSheetList(options){
 		,'timeout':'' //function called on timeout 
 		,'callback':function(){} 
 		,'noResults':function(){console.log('no results returned')} 
+		,'noResultsString':"No events available."
 		,'helpersObj':displayGoogleSheetHelper
 		,'getData':'' //function called when user only wants the json returned
 		,'getDataClean':function(json){console.log(JSON.stringify(json))}
@@ -223,7 +233,7 @@ function getGoogleSheetList(options){
 			if(location.protocol=="http:") protocol="http:";
 			settings.feedURL=protocol+'//spreadsheets.google.com/feeds/worksheets/'+settings.docId+'/public/full?alt=json';			
 		}
-		if(settings.testing===true) console.log("url: "+settings.feedURL);
+		if(settings.testing===true)console.log("url: "+settings.feedURL);
 
 		settings.helpersObj.makeCORSRequest({
 			'url':settings.feedURL
@@ -272,7 +282,7 @@ function getGoogleSheetList(options){
 
 	}	
 	if(settings.docId=="" && settings.feedURL=="" ){console.log('ERROR: No Document ID is defined');return}
-	init();
+	 return init();
 
 
 };
@@ -324,7 +334,15 @@ var displayGoogleSheetHelper={
 			  if (!xhr) {alert('CORS not supported');return;}
 			
 			  if(settings.type=='json'){
-			  	xhr.onload = function() {settings.onload(JSON.parse(xhr.responseText))};
+			  	xhr.onload = function() {
+			  		try {
+					    settings.onload(JSON.parse(xhr.responseText))
+					}
+					catch(err) {
+						console.log('DisplayGoogleSheet - Data returned from CORS request is not JSON - this may most likely be because the document or sheet is not published or unknown.')
+					    if(settings.error!="")settings.error();
+					} 
+			  	};
 			  }
 			  else xhr.onload = function() {settings.onload(xhr.responseText)};
 			  xhr.onerror = function() {if(settings.error!="")settings.error()};

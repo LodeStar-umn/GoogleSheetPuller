@@ -1,0 +1,72 @@
+
+
+Display Google Sheet Testing List
+******************************************************************
+
+
+
+**** GET SHEET LIST HELPER ****
+
+need to repeat the following tests for sheet list
+
+
+
+**** URL ****
+
+ X Verify that the URL is expected (sheet provided)
+
+**** JSON format ****
+ X Verify that the JSON returned is in the expected format
+
+ X Verify that the JSON returned from getDataClean is in the expected format
+
+
+
+**** Response ****
+ X Verify that if 'getData' is a function ... raw json is returned and nothing is displayed
+
+ X Verify that if 'getDataClean' is a function ... cleaned json is returned and nothing is displayed
+
+ X Verify that if there isn't any results, settings.noResults() is called
+
+ X Verify that if there isn't any results,settings.noResultsString is displayed in containingObj
+
+ X Verify that if settings.customFormatting is set, it is called and  that the JSON is passed
+
+ X Verify that if settings.customFormatting is set, it is called  the the result of customFomratting is displayed in containingObj
+
+ X Verify that if no customFormatting is set then the default formatting is used and displayed in the containingObj
+
+ X Verify that callback is called after HTML insertion
+
+ X Verify that a header with spaces doesn't cause an issue
+
+
+
+ **** jQuery ****
+X Insure that jQuery properly calls the main function
+
+X Verify that success is called after main function
+
+
+**** Errors ****
+
+? There is an error with the CORS request (aka request fails)
+
+? There is a timeout with the CORS request (no timeout function set)
+
+? There is a timeout with the CORS request (timeout function set)
+
+? There is a response from Google with an error
+
+X Trying to connect to a file that is not published
+
+X Trying to connect to a sheet that is not published
+
+X Incorrect doc ID is set
+
+X Incorrect sheet ID is set
+
+X Incorrect feedURL is set
+
+? Containing object does not exist
