@@ -1,0 +1,18 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": "================",
+  "main": "displayGoogleSheet.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node lodeStar.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.umn.edu/gedion/GoogleSheetPuller"
+  },
+  "author": "",
+  "license": "ISC"
+}
