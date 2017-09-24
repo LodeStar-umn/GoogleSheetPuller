@@ -1,4 +1,5 @@
-let fs = require('fs');
+let fs = require('fs'),
+    _  = require('lodahs);
 
 class Crosswords {
   constructor() {
@@ -30,7 +31,7 @@ class Crosswords {
         hint,
         jt = [];
 
-        words.forEach((item, index) => {
+        _.each((item, index) => {
             let w = item.Word,
                 t = item.Type,
                 d = item.Definition;

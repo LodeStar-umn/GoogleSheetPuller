@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "================",
   "main": "displayGoogleSheet.js",
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "github": "^11.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node lodeStar.js"
